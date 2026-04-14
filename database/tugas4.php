@@ -4,46 +4,32 @@ $db   = 'mahasiswa1';
 $user = 'root';
 $pass = '12345';
 
-// ini adalah fitur untuk mengupdate data user melalui CLI
-
-// ==========================
-// KONFIGURASI DATABASE
-// ==========================
-$dsn  = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+$dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
+    $pdo = new PDO($dsn, $user, $pass);
 } catch (PDOException $e) {
-    die("Koneksi DB gagal: " . $e->getMessage());
+    die("Koneksi gagal");
 }
 
-// ==========================
-// INPUT DARI CLI
-// ==========================
-echo "Masukkan ID user yang ingin diupdate: ";
+echo "ID user: ";
 $id = trim(fgets(STDIN));
 
-echo "Masukkan username baru: ";
+echo "Username baru: ";
 $username = trim(fgets(STDIN));
 
-echo "Masukkan email baru: ";
+echo "Email baru: ";
 $email = trim(fgets(STDIN));
 
-// ==========================
-// QUERY UPDATE
-// ==========================
-$sql = "UPDATE user SET username = :username, email = :email, updated_at = :updated_at WHERE id = :id";
-
+$sql = "UPDATE user SET username=?, email=?, updated_at=? WHERE id=?";
 $stmt = $pdo->prepare($sql);
+
 $stmt->execute([
-    ':username' => $username,
-    ':email' => $email,
-    ':updated_at' => time(),
-    ':id' => $id
+    $username,
+    $email,
+    time(),
+    $id
 ]);
 
-echo "User berhasil diupdate\n";
+echo "Update selesai\n";
 ?>

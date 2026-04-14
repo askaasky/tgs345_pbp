@@ -23,7 +23,7 @@ $users = $pdo->query($sqlUser)->fetchAll();
 $counter =1;
 
 foreach ($users as $row){
-    echo $counter.' '.$row['username'].' - '.$row['email'].'- '.$row['password_hash']."\n";
+    echo $counter.' (ID: '.$row['id'].') '.$row['username'].' - '.$row['email']."\n";
     $counter++;
 }
 

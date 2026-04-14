@@ -1,62 +1,56 @@
 <?php
-// menjalankan kode php di web server
-// saya menggunakan Laragon sebagai web server lokal
+// Menjalankan PHP di web server
+// Saya menggunakan Laragon sebagai web server lokal
 
-echo "<h3>Saya memakai laragon untuk menjalankan PHP web server</h3>";
+echo "<h3 align='center'>Menampilkan Data User Sistem</h3>";
 
-// KONEKSI DATABASE (pakai PDO - lebih bagus)
+// KONEKSI DATABASE
 $host = 'localhost';
 $db   = 'mahasiswa1';
 $user = 'root';
 $pass = '12345';
 
-$dsn  = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+$dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
 try {
-    $pdo = new PDO($dsn, $user, $pass);
+    $conn = new PDO($dsn, $user, $pass);
 } catch (PDOException $e) {
-    die("Koneksi gagal: " . $e->getMessage());
+    die("Tidak bisa koneksi database");
 }
 
-// QUERY DATA
-$sql = "SELECT * FROM user";
-$users = $pdo->query($sql)->fetchAll();
+// AMBIL DATA USER
+$query = "SELECT id, username FROM user";
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tugas 5 - Web Server PHP</title>
+    <title>Web PHP - Tugas 5</title>
     <style>
         body {
-            font-family: Arial;
-            background-color: #f4f6f8;
-            padding: 20px;
-        }
-        h2, h3 {
-            text-align: center;
+            font-family: sans-serif;
+            background: #eef1f5;
         }
         table {
+            margin: 20px auto;
             border-collapse: collapse;
-            width: 60%;
-            margin: auto;
-            background: white;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
+            width: 50%;
+            background: #fff;
         }
         th {
-            background-color: #007BFF;
+            background: #28a745;
             color: white;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-
-<h2>Data User</h2>
 
 <table>
     <tr>
@@ -64,18 +58,12 @@ $users = $pdo->query($sql)->fetchAll();
         <th>Username</th>
     </tr>
 
-    <?php if (count($users) > 0): ?>
-        <?php foreach ($users as $row): ?>
-        <tr>
-            <td><?= $row['id']; ?></td>
-            <td><?= $row['username']; ?></td>
-        </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="2">Tidak ada data</td>
-        </tr>
-    <?php endif; ?>
+    <?php foreach ($result as $data): ?>
+    <tr>
+        <td><?= $data['id']; ?></td>
+        <td><?= $data['username']; ?></td>
+    </tr>
+    <?php endforeach; ?>
 
 </table>
 
